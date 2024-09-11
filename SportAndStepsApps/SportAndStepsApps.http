@@ -1,0 +1,6 @@
+@SportAndStepsApps_HostAddress = http://localhost:5087
+
+GET {{SportAndStepsApps_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
