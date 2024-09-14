@@ -5,8 +5,7 @@ using SportAndStepsApps.Models;
 
 namespace SportAndStepsApps.Controllers;
 
-[ApiController]
-public class UsersController(SportsContext context) : ControllerBase
+public class UsersController(SportsContext context) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()

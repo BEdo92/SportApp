@@ -13,6 +13,8 @@ public class Program
         builder.Services.AddDbContext<SportsContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        builder.Services.AddCors();
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -31,6 +33,10 @@ public class Program
 
         app.UseAuthorization();
 
+        app.UseCors(x => x
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
         app.MapControllers();
 
