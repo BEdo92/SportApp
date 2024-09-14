@@ -2,8 +2,8 @@
 {
     public class UserDto
     {
-        public int Id { get; set; }
-        public string UserName { get; set; }
+        public required string Username { get; set; }
+        public required string Token { get; set; }
 
     }
 }

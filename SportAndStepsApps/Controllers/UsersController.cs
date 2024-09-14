@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.Models;
@@ -7,6 +8,7 @@ namespace SportAndStepsApps.Controllers;
 
 public class UsersController(SportsContext context) : BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
     {
@@ -15,6 +17,7 @@ public class UsersController(SportsContext context) : BaseApiController
         return Ok(users);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUserAsync(int id)
     {

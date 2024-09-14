@@ -2,16 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.DTOs;
+using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace SportAndStepsApps.Controllers;
 
-public class AccountController(SportsContext context) : BaseApiController
+public class AccountController(SportsContext context, ITokenService tokenService) : BaseApiController
 {
     [HttpPost("register")]
-    public async Task<ActionResult<User>> RegisterAsync(RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> RegisterAsync(RegisterDto registerDto)
     {
         if (await UserExistsAsync(registerDto.Username))
         {
@@ -30,11 +31,15 @@ public class AccountController(SportsContext context) : BaseApiController
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return user;
+        return new UserDto
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<User>> LoginAsync(LoginDto loginDto)
+    public async Task<ActionResult<UserDto>> LoginAsync(LoginDto loginDto)
     {
         var user = await context.Users.FirstOrDefaultAsync(x =>
         x.UserName == loginDto.Username.ToLower());
@@ -56,7 +61,11 @@ public class AccountController(SportsContext context) : BaseApiController
             }
         }
 
-        return user;
+        return new UserDto 
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
     private async Task<bool> UserExistsAsync(string username)
