@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 /SportAndStepsApps/appsettings.json
 /SportAndStepsApps/appsettings.Development.json
+/SportAndStepsApps/sports.db
+/SportAndStepsApps/sports.db-shm
+/SportAndStepsApps/sports.db-wal
