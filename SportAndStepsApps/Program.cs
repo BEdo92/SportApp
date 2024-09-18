@@ -1,11 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SportAndStepsApps.Data;
 using SportAndStepsApps.Extensions;
-using SportAndStepsApps.Interfaces;
-using SportAndStepsApps.Services;
-using System.Text;
 
 namespace SportAndStepsApps;
 
@@ -23,13 +16,7 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseCors(x => x
             .AllowAnyHeader()

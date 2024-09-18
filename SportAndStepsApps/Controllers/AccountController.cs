@@ -31,18 +31,20 @@ public class AccountController(SportsContext context, ITokenService tokenService
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return new UserDto
+        var userDto = new UserDto
         {
             Username = user.UserName,
             Token = tokenService.CreateToken(user)
         };
+
+        return userDto;
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> LoginAsync(LoginDto loginDto)
     {
         var user = await context.Users.FirstOrDefaultAsync(x =>
-        x.UserName == loginDto.Username.ToLower());
+        x.UserName == loginDto.Username/*.ToLower()*/);
 
         if (user is null)
         {

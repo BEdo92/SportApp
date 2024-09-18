@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RegisterComponent } from "../register/register.component";
 import { HttpClient } from '@angular/common/http';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
   http = inject(HttpClient);
+  accountService = inject(AccountService);
   registerMode = false;
   users: any;
 
