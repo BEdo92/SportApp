@@ -1,4 +1,5 @@
 using SportAndStepsApps.Extensions;
+using SportAndStepsApps.Middleware;
 
 namespace SportAndStepsApps;
 
@@ -17,6 +18,8 @@ public class Program
 
         // Configure the HTTP request pipeline.
         //app.UseHttpsRedirection();
+
+        app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseCors(x => x
             .AllowAnyHeader()

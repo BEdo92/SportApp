@@ -1,1 +1,40 @@
-<p>user-sport works!</p>
+<div>
+    <form #registerForm="ngForm" (ngSubmit)="saveData()" autocomplete="off">
+        <h2 class="text-center text-primary">Save today's activities!</h2>
+        <hr>
+        <div class="mb-3 form-floating">
+            <input
+              type="date"
+              class="form-control"
+              name="date"
+              required [(ngModel)]="model.date"
+              placeholder="Date">
+              <label>Date</label>
+        </div>
+    
+        <div class="mb-3 form-floating">
+            <input
+              type="text"
+              class="form-control"
+              name="steps"
+              required [(ngModel)]="model.steps"
+              placeholder="Steps">
+            <label>Steps</label>
+        </div>
+    
+        <div class="mb-3 form-floating">
+            <input
+              type="number"
+              class="form-control"
+              name="distance"
+              required [(ngModel)]="model.distance"
+              placeholder="Date">
+              <label>Distance</label>
+        </div>
+    
+        <div class="form-group text-center">
+          <button class="btn btn-success me-2" type="submit">Save</button>
+          <button class="btn btn-default me-2" (click)="cancel()" type="button">Cancel</button>
+        </div>
+    </form>
+</div>

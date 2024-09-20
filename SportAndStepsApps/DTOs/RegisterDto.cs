@@ -1,7 +1,13 @@
-﻿namespace SportAndStepsApps.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SportAndStepsApps.DTOs;
 
 public class RegisterDto
 {
-    public required string Username { get; set; }
-    public required string Password { get; set; }
+    [Required]
+    public string Username { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(15, MinimumLength = 4)]
+    public string Password { get; set; } = string.Empty;
 }

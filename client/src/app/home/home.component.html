@@ -3,8 +3,7 @@
 
         @if (!registerMode) {
         @if (accountService.currentUser()) {
-        <h2>Welcome back!</h2>
-        <p>Saving daily sports goes here.</p>
+        <h2>Welcome back, {{accountService.currentUser()?.username | titlecase}}!</h2>
         } @else {
         <h1>Welcome to Sports meter</h1>
         <p class="lead">Log in to see the latest sports activities</p>
@@ -18,12 +17,11 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-4">
-                    <app-register (cancalRegister)="cancelRegisterMode($event)">
+                    <app-register (cancelRegister)="cancelRegisterMode($event)">
                     </app-register>
                 </div>
             </div>
 
         </div>
         }
-
     </div>
