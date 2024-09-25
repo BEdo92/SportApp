@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SportAndStepsApps.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeStructure : Migration
+    public partial class NavigationPropsAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,15 +35,28 @@ namespace SportAndStepsApps.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SportId = table.Column<int>(type: "INTEGER", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Distance = table.Column<int>(type: "INTEGER", nullable: false),
-                    NumOfSteps = table.Column<int>(type: "INTEGER", nullable: false)
+                    NumOfSteps = table.Column<int>(type: "INTEGER", nullable: false),
+                    SportTypeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SportId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserActivities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserActivities_SportTypes_SportTypeId",
+                        column: x => x.SportTypeId,
+                        principalTable: "SportTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserActivities_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -58,16 +71,26 @@ namespace SportAndStepsApps.Migrations
                     { 5, "Hike" },
                     { 6, "Trail run" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserActivities_SportTypeId",
+                table: "UserActivities",
+                column: "SportTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserActivities_UserId",
+                table: "UserActivities",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SportTypes");
+                name: "UserActivities");
 
             migrationBuilder.DropTable(
-                name: "UserActivities");
+                name: "SportTypes");
 
             migrationBuilder.CreateTable(
                 name: "Sports",

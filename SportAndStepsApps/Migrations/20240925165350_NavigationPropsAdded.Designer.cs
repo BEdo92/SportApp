@@ -11,8 +11,8 @@ using SportAndStepsApps.Data;
 namespace SportAndStepsApps.Migrations
 {
     [DbContext(typeof(SportsContext))]
-    [Migration("20240920185414_ChangeStructure")]
-    partial class ChangeStructure
+    [Migration("20240925165350_NavigationPropsAdded")]
+    partial class NavigationPropsAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,12 +108,38 @@ namespace SportAndStepsApps.Migrations
                     b.Property<int>("SportId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SportTypeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SportTypeId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserActivities");
+                });
+
+            modelBuilder.Entity("SportAndStepsApps.Models.UserActivity", b =>
+                {
+                    b.HasOne("SportAndStepsApps.Models.SportType", "SportType")
+                        .WithMany()
+                        .HasForeignKey("SportTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SportAndStepsApps.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SportType");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
