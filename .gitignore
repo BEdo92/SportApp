@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /SportAndStepsApps/sports.db
 /SportAndStepsApps/sports.db-shm
 /SportAndStepsApps/sports.db-wal
+/SportAndStepsApps/Data/SportSeedData.json
