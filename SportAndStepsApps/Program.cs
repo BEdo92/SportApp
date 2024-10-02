@@ -1,36 +1,45 @@
+using Microsoft.EntityFrameworkCore;
+using SportAndStepsApps.Data;
 using SportAndStepsApps.Extensions;
 using SportAndStepsApps.Middleware;
 
-namespace SportAndStepsApps;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+// Add services to the container.
+
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+//app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
 {
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-
-        builder.Services.AddApplicationServices(builder.Configuration);
-        builder.Services.AddIdentityServices(builder.Configuration);
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        //app.UseHttpsRedirection();
-
-        app.UseMiddleware<ExceptionMiddleware>();
-
-        app.UseCors(x => x
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .WithOrigins("http://localhost:4200", "https://localhost:4200"));
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.Run();
-    }
+    var context = services.GetRequiredService<SportsContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedSportTypes(context);
 }
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration.");
+}
+
+app.Run();

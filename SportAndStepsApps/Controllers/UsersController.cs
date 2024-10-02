@@ -1,27 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SportAndStepsApps.Data;
+using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 
 namespace SportAndStepsApps.Controllers;
 
-public class UsersController(SportsContext context) : BaseApiController
+[Authorize]
+public class UsersController(IUserRepository userRepository) : BaseApiController
 {
-    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
     {
-        List<User> users = await context.Users.ToListAsync();
+        var users = await userRepository.GetUsersAsync();
 
         return Ok(users);
     }
 
-    [AllowAnonymous]
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUserAsync(int id)
+    [HttpGet("{username}")]
+    public async Task<ActionResult<User>> GetUserAsync(string username)
     {
-        var users = await context.Users.FindAsync(id);
+        var users = await userRepository.GetUserByUsernameAsync(username);
 
         if (users is null)
         {

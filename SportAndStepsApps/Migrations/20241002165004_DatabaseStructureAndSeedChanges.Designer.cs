@@ -11,8 +11,8 @@ using SportAndStepsApps.Data;
 namespace SportAndStepsApps.Migrations
 {
     [DbContext(typeof(SportsContext))]
-    [Migration("20240925165350_NavigationPropsAdded")]
-    partial class NavigationPropsAdded
+    [Migration("20241002165004_DatabaseStructureAndSeedChanges")]
+    partial class DatabaseStructureAndSeedChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,38 +33,6 @@ namespace SportAndStepsApps.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SportTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Run"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Swim"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Ride"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Walk"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Hike"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Trail run"
-                        });
                 });
 
             modelBuilder.Entity("SportAndStepsApps.Models.User", b =>

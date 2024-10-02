@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace SportAndStepsApps.Migrations
 {
     /// <inheritdoc />
-    public partial class NavigationPropsAdded : Migration
+    public partial class DatabaseStructureAndSeedChanges : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,19 +55,6 @@ namespace SportAndStepsApps.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "SportTypes",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Run" },
-                    { 2, "Swim" },
-                    { 3, "Ride" },
-                    { 4, "Walk" },
-                    { 5, "Hike" },
-                    { 6, "Trail run" }
                 });
 
             migrationBuilder.CreateIndex(
