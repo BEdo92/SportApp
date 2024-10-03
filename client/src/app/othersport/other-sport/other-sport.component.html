@@ -1,1 +1,8 @@
-<p>other-sport works!</p>
+<h2>Logged by everybody</h2>
+<div class="row">
+    <div class="col-2">
+        @for (activity of userActivities; track activity.username) {
+            <p>{{activity.distance}}</p>
+        }
+    </div>
+</div>

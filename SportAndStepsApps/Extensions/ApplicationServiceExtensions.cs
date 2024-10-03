@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.Interfaces;
+using SportAndStepsApps.Repositories;
 using SportAndStepsApps.Services;
 
 namespace SportAndStepsApps.Extensions;
@@ -20,6 +21,7 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 
         return services;
     }

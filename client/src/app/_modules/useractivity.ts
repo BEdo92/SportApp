@@ -1,6 +1,5 @@
-export interface Sport {
+export interface UserActivity {
     username: string;
-    token: string;
     distance: number;
     steps: number;
     type: string;

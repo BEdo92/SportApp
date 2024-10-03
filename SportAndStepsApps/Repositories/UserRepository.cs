@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SportAndStepsApps.Data;
 using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 
-namespace SportAndStepsApps.Data;
+namespace SportAndStepsApps.Repositories;
 
 public class UserRepository(SportsContext context) : IUserRepository
 {
