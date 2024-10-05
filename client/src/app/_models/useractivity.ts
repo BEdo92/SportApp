@@ -1,7 +1,7 @@
 export interface UserActivity {
+    id: number;
     username: string;
     distance: number;
-    steps: number;
     type: string;
     date: string;
 }

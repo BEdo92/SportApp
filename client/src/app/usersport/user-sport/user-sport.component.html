@@ -1,5 +1,6 @@
-<div>
-    <form #registerForm="ngForm" (ngSubmit)="saveData()" autocomplete="off">
+@if (accountService.currentUser()) {
+  <div>
+    <form #saveActivityForm="ngForm" (ngSubmit)="saveData()" autocomplete="off">
         <h2 class="text-center text-primary">Save today's activities!</h2>
         <hr>
         <div class="mb-3 form-floating">
@@ -13,15 +14,15 @@
         </div>
     
         <div class="mb-3 form-floating">
-            <input
-              type="text"
-              class="form-control"
-              name="steps"
-              required [(ngModel)]="model.steps"
-              placeholder="Steps">
-            <label>Steps</label>
+            <select
+              class="form-select"
+              name="sporttype"
+              required [(ngModel)]="model.sporttype">
+              <option *ngFor="let sport of sportTypes" [ngValue]="sport">{{ sport }}</option>
+            </select>
+            <label>Sport type</label>
         </div>
-    
+
         <div class="mb-3 form-floating">
             <input
               type="number"
@@ -38,3 +39,4 @@
         </div>
     </form>
 </div>
+} 

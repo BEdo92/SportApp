@@ -63,7 +63,7 @@ public class AccountController(SportsContext context, ITokenService tokenService
             }
         }
 
-        return new UserDto 
+        return new UserDto
         {
             Username = user.UserName,
             Token = tokenService.CreateToken(user)
@@ -72,7 +72,7 @@ public class AccountController(SportsContext context, ITokenService tokenService
 
     private async Task<bool> UserExistsAsync(string username)
     {
-        return await context.Users.AnyAsync(x => 
+        return await context.Users.AnyAsync(x =>
             x.UserName.ToLower() == username.ToLower());
         // NOTE: For EF, operator '==' should be used instead of 'Equals'.
     }

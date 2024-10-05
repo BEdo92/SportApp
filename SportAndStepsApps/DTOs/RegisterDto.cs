@@ -10,4 +10,10 @@ public class RegisterDto
     [Required]
     [StringLength(15, MinimumLength = 4)]
     public string Password { get; set; } = string.Empty;
+
+    [Required]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    public string Location { get; set; } = string.Empty;
 }

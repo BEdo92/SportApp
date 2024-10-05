@@ -5,6 +5,8 @@ import { OtherSportComponent } from './othersport/other-sport/other-sport.compon
 import { authGuard } from './_guards/auth.guard';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { preventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -14,6 +16,8 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             {path: 'usersport', component: UserSportComponent},
+            {path: 'useredit', component: UserEditComponent, 
+                canDeactivate: [preventUnsavedChangesGuard]},
             {path: 'othersport', component: OtherSportComponent},
         ]
     },
