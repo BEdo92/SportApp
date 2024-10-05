@@ -17,7 +17,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
 
         var usersToReturn = mapper.Map<IEnumerable<MemberDto>>(users);
 
-        return Ok(users);
+        return Ok(usersToReturn);
     }
 
     [HttpGet("{username}")]
