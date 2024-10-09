@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.DTOs;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace SportAndStepsApps.Controllers;
 
-public class AccountController(SportsContext context, ITokenService tokenService) : BaseApiController
+public class AccountController(SportsContext context, ITokenService tokenService, IMapper mapper) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> RegisterAsync(RegisterDto registerDto)
@@ -21,12 +22,10 @@ public class AccountController(SportsContext context, ITokenService tokenService
 
         using var hmac = new HMACSHA512();
 
-        var user = new User
-        {
-            UserName = registerDto.Username,
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
-        };
+        var user = mapper.Map<User>(registerDto);
+        user.UserName = registerDto.Username.ToLower();
+        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+        user.PasswordSalt = hmac.Key;
 
         context.Users.Add(user);
         await context.SaveChangesAsync();

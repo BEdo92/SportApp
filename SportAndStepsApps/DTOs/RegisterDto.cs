@@ -12,8 +12,8 @@ public class RegisterDto
     public string Password { get; set; } = string.Empty;
 
     [Required]
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; }
 
     [Required]
-    public string Location { get; set; } = string.Empty;
+    public string? Location { get; set; }
 }

@@ -10,5 +10,6 @@ public class AutoMapperProfiles : Profile
     {
         CreateMap<User, MemberDto>();
         CreateMap<MemberDto, User>();
+        CreateMap<RegisterDto, User>();
     }
 }
