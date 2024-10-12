@@ -11,5 +11,8 @@ public class AutoMapperProfiles : Profile
         CreateMap<User, MemberDto>();
         CreateMap<MemberDto, User>();
         CreateMap<RegisterDto, User>();
+        CreateMap<SportDto, UserActivity>()
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+            .ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.Distance));
     }
 }

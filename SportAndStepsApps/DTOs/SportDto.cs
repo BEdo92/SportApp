@@ -2,10 +2,7 @@
 
 public class SportDto
 {
-    public string Username { get; set; }
-    public string Token { get; set; }
-    public int Distance { get; set; }
-    public int Steps { get; set; }
-    public string Type { get; set; }
-    public DateTime Date { get; set; }
+    public required int Distance { get; set; }
+    public required string SportType { get; set; } = string.Empty;
+    public required DateTime Date { get; set; }
 }

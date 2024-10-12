@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   private accountService = inject(AccountService);
-  private fb = inject(FormBuilder)
+  private fb = inject(FormBuilder);
   private router = inject(Router);
   cancelRegister = output<boolean>();
   registerForm: FormGroup = new FormGroup({});

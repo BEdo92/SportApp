@@ -1,19 +1,23 @@
-import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { Member } from '../_models/member';
 import { AccountService } from '../_services/account.service';
 import { MemberService } from '../_services/member.service';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { TextInputComponent } from '../_forms/text-input/text-input.component';
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule, TextInputComponent],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css'
 })
 export class UserEditComponent implements OnInit {
-  @ViewChild('editForm') editForm?: NgForm;
+  private fb = inject(FormBuilder);
+  editForm: FormGroup = new FormGroup({});
+  validationErrors: string[] | undefined;
+
   @HostListener('window:beforeunload', ['$event']) notify($event: any) {
     if (this.editForm?.dirty) {
       $event.returnValue = true;
@@ -27,6 +31,7 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMember();
+    this.initializeForm();
   }
 
   loadMember() {
@@ -41,13 +46,25 @@ export class UserEditComponent implements OnInit {
     });
   }
 
+  initializeForm() {
+    this.editForm = this.fb.group({
+      username: [this.member?.username, Validators.required],
+      email: [this.member?.email, [Validators.required, Validators.email]],
+      location: [this.member?.location, Validators.required]
+    });
+    this.editForm.controls['password'].valueChanges.subscribe({
+      next: () => this.editForm.controls['confirmPassword'].updateValueAndValidity()
+    });
+  }
+
   updateMember() {
+    console.log(this.editForm?.value);
     this.memberService.updateMember(this.editForm?.value).subscribe({
       next: _ => {
         this.toastr.success('Profile updated successfully.');
         this.editForm?.reset(this.member);
       },
-      error: error => this.toastr.error(error.error)
+      error: error => this.validationErrors = error
     });
   }
 }

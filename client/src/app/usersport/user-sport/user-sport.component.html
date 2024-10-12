@@ -1,41 +1,34 @@
 @if (accountService.currentUser()) {
   <div>
-    <form #saveActivityForm="ngForm" (ngSubmit)="saveData()" autocomplete="off">
+    <form [formGroup]="saveActivityForm" (ngSubmit)="saveData()" autocomplete="off">
         <h2 class="text-center text-primary">Save today's activities!</h2>
         <hr>
-        <div class="mb-3 form-floating">
-            <input
-              type="date"
-              class="form-control"
-              name="date"
-              required [(ngModel)]="model.date"
-              placeholder="Date">
-              <label>Date</label>
-        </div>
+
+        <app-date-picker [formControl]="$any(saveActivityForm.controls['date'])" [label]="'Date'">
+        </app-date-picker>
     
-        <div class="mb-3 form-floating">
-            <select
-              class="form-select"
-              name="sporttype"
-              required [(ngModel)]="model.sporttype">
-              <option *ngFor="let sport of sportTypes" [ngValue]="sport">{{ sport }}</option>
-            </select>
-            <label>Sport type</label>
+        <div>
+          <label for="sportType">Sport Type</label>
+          <select [formControl]="$any(saveActivityForm.controls['sportType'])" id="sportType">
+            <option *ngFor="let sportType of sportTypes" [value]="sportType">{{ sportType }}</option>
+          </select>
         </div>
 
-        <div class="mb-3 form-floating">
-            <input
-              type="number"
-              class="form-control"
-              name="distance"
-              required [(ngModel)]="model.distance"
-              placeholder="Date">
-              <label>Distance</label>
-        </div>
+        <app-text-input [formControl]="$any(saveActivityForm.controls['distance'])" [label]="'Distance'">
+        </app-text-input>
     
+        @if (validationErrors) {
+          <div class="alert alert-danger text-start">
+            <ul>
+              @for (error of validationErrors; track $index) {
+                <li>{{error}}</li>
+              }
+            </ul>
+          </div>
+        }
+
         <div class="form-group text-center">
           <button class="btn btn-success me-2" type="submit">Save</button>
-          <button class="btn btn-default me-2" (click)="cancel()" type="button">Cancel</button>
         </div>
     </form>
 </div>
