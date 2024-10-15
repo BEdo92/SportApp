@@ -19,25 +19,25 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
         return Ok(userActivities);
     }
 
-    //[HttpGet]
-    //public async Task<ActionResult<UserActivity>> GetUserActivityByIdAsync(int sportId)
-    //{
-    //    var userActivity = await userActivityRepository.GetUserActivityByIdAsync(sportId);
-
-    //    if (userActivity is null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return Ok(userActivity);
-    //}
-
-    [HttpGet("{username}")]
+    [HttpGet("user/{username}")]
     public async Task<ActionResult<IEnumerable<UserActivity>>> GetUserActivitiesByUsernameAsync(string username)
     {
         var userActivities = await userActivityRepository.GetUserActivitiesByUserNameAsync(username);
 
         return Ok(userActivities);
+    }
+
+    [HttpGet("sport/{sporttype}")]
+    public async Task<ActionResult<IEnumerable<SportSummaryDto>>> GetSummarizedDistanceBySportTypeAsync(string sportType)
+    {
+        var sportSummary = await userActivityRepository.GetSummarizedDistanceBySportTypeAsync(sportType);
+
+        if (sportSummary == null)
+        {
+            return BadRequest($"There is no registered sport activity with sport type {sportType}.");
+        }
+
+        return Ok(sportSummary);
     }
 
     [HttpPost]

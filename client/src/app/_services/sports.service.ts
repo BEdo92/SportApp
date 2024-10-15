@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { UserActivity } from '../_models/useractivity';
+import { SportSummary } from '../_models/sportsummary';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class SportsService {
   }
 
   getSport(username: string) {
-    return this.http.get<UserActivity>(this.baseUrl + 'useractivities/' + username);
+    return this.http.get<UserActivity>(this.baseUrl + 'useractivities/user/' + username);
   }
 
   getSportTypes() {
@@ -24,5 +25,9 @@ export class SportsService {
 
   saveActivity(model: any) {
     return this.http.post(this.baseUrl + 'useractivities', model);
+  }
+
+  getSportByType(sportType: string) {
+    return this.http.get<SportSummary>(this.baseUrl + 'useractivities/sport/' + sportType);
   }
 }

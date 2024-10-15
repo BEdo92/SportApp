@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
-import { UserActivity } from '../../_models/useractivity';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { SportsService } from '../../_services/sports.service';
+import { SportSummary } from '../../_models/sportsummary';
 
 @Component({
   selector: 'app-sport-card',
@@ -8,7 +9,22 @@ import { UserActivity } from '../../_models/useractivity';
   templateUrl: './sport-card.component.html',
   styleUrl: './sport-card.component.css'
 })
-export class SportCardComponent {
-  activity = input.required<UserActivity>();
+export class SportCardComponent implements OnInit {
+  sportType = input.required<string>();
+  sportSummary: SportSummary | undefined;
+  private sportService = inject(SportsService);
 
+  ngOnInit(): void {
+    this.loadSportsByTypes();
+  }
+
+  loadSportsByTypes() {
+    this.sportService.getSportByType(this.sportType()).subscribe({
+      next: sportSummaries => {
+        this.sportSummary = sportSummaries;
+        console.log(this.sportSummary);
+      },
+      error: error => console.log(error)
+    });
+  }
 }

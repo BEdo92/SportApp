@@ -1,8 +1,8 @@
 <h2>Logged by everybody</h2>
 <div class="row">
-    @for (activity of userActivities; track activity.type) {
+    @for (sportType of sportTypes; track sportType) {
     <div class="col-2">
-        <app-sport-card [activity]="activity"></app-sport-card>
+        <app-sport-card [sportType]="sportType"></app-sport-card>
     </div>
     }
 </div>

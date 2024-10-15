@@ -11,17 +11,29 @@ import { SportCardComponent } from "../sport-card/sport-card.component";
   styleUrl: './other-sport.component.css'
 })
 export class OtherSportComponent implements OnInit {
-  private userActivityService = inject(SportsService);
+  private sportService = inject(SportsService);
+  sportTypes: string[] = [];
+  validationErrors: string[] | undefined;
   userActivities: UserActivity[] = []; 
 
   ngOnInit(): void {
+    this.loadSportTypes();
     this.loadSports();
   }
 
   loadSports() {
-    this.userActivityService.getSports().subscribe({
+    this.sportService.getSports().subscribe({
       next: userActivities => this.userActivities = userActivities
     })
   }
 
+  loadSportTypes() {
+    this.sportService.getSportTypes().subscribe({
+      next: sportTypes => {
+        this.sportTypes = sportTypes;
+        console.log(this.sportTypes);
+      },
+      error: error => this.validationErrors = error
+    });
+  }
 }

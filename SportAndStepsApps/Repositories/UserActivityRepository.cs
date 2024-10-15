@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
+using SportAndStepsApps.DTOs;
 using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 
@@ -10,6 +11,31 @@ public class UserActivityRepository(SportsContext context) : IUserActivityReposi
     public async Task AddUserActivityAsync(UserActivity userActivity)
     {
         await context.UserActivities.AddAsync(userActivity);
+    }
+
+    public async Task<SportSummaryDto?> GetSummarizedDistanceBySportTypeAsync(string sportType)
+    {
+        var sportSummary = await context.UserActivities
+            .Include(x => x.SportType)
+            .Where(x => x.SportType.Name == sportType)
+            .GroupBy(x => x.SportType)
+            .Select(x => new SportSummaryDto
+            {
+                SportType = x.Key.Name,
+                Distance = x.Sum(x => x.Distance)
+            })
+            .FirstOrDefaultAsync();
+
+        if (sportSummary == null)
+        {
+            return new SportSummaryDto
+            {
+                SportType = sportType,
+                Distance = 0
+            };
+        }
+
+        return sportSummary;
     }
 
     public async Task<IEnumerable<UserActivity>> GetUserActivitiesAsync()
