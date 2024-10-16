@@ -20,9 +20,9 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
     }
 
     [HttpGet("user/{username}")]
-    public async Task<ActionResult<IEnumerable<UserActivity>>> GetUserActivitiesByUsernameAsync(string username)
+    public async Task<ActionResult<IEnumerable<SportSummaryDto>>> GetSportSummaryByUsernameAsync(string username)
     {
-        var userActivities = await userActivityRepository.GetUserActivitiesByUserNameAsync(username);
+        var userActivities = await userActivityRepository.GetSportSummaryByUserNameAsync(username);
 
         return Ok(userActivities);
     }

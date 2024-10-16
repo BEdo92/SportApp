@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { UserActivity } from '../_models/useractivity';
@@ -15,8 +15,8 @@ export class SportsService {
     return this.http.get<UserActivity[]>(this.baseUrl + 'useractivities');
   }
 
-  getSport(username: string) {
-    return this.http.get<UserActivity>(this.baseUrl + 'useractivities/user/' + username);
+  getSportsOfUser(username: string) {
+    return this.http.get<SportSummary[]>(this.baseUrl + 'useractivities/user/' + username);
   }
 
   getSportTypes() {

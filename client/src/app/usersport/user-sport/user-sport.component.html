@@ -9,6 +9,7 @@
     
         <div>
           <label for="sportType">Sport Type</label>
+          <br>
           <select [formControl]="$any(saveActivityForm.controls['sportType'])" id="sportType">
             <option *ngFor="let sportType of sportTypes" [value]="sportType">{{ sportType }}</option>
           </select>

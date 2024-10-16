@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.DTOs;
 using SportAndStepsApps.Interfaces;
@@ -6,7 +8,7 @@ using SportAndStepsApps.Models;
 
 namespace SportAndStepsApps.Repositories;
 
-public class UserActivityRepository(SportsContext context) : IUserActivityRepository
+public class UserActivityRepository(SportsContext context, IMapper mapper) : IUserActivityRepository
 {
     public async Task AddUserActivityAsync(UserActivity userActivity)
     {
@@ -19,11 +21,7 @@ public class UserActivityRepository(SportsContext context) : IUserActivityReposi
             .Include(x => x.SportType)
             .Where(x => x.SportType.Name == sportType)
             .GroupBy(x => x.SportType)
-            .Select(x => new SportSummaryDto
-            {
-                SportType = x.Key.Name,
-                Distance = x.Sum(x => x.Distance)
-            })
+            .ProjectTo<SportSummaryDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
         if (sportSummary == null)
@@ -43,7 +41,7 @@ public class UserActivityRepository(SportsContext context) : IUserActivityReposi
         return await context.UserActivities.ToListAsync();
     }
 
-    public async Task<IEnumerable<UserActivity>> GetUserActivitiesByUserNameAsync(string username)
+    public async Task<IEnumerable<SportSummaryDto>> GetSportSummaryByUserNameAsync(string username)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == username);
         if (user == null)
@@ -52,7 +50,11 @@ public class UserActivityRepository(SportsContext context) : IUserActivityReposi
             return [];
         }
 
-        return await context.UserActivities.Where(x => x.UserId == user.Id).ToListAsync();
+        return await context.UserActivities
+            .Where(x => x.UserId == user.Id)
+            .GroupBy(x => x.SportType)
+            .ProjectTo<SportSummaryDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<UserActivity?> GetUserActivityByIdAsync(int id)
