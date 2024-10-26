@@ -2,8 +2,7 @@
 
 namespace SportAndStepsApps.Models;
 
-public class User : IdentityUser<int>
+public class AppRole : IdentityRole<int>
 {
-    public string Location { get; set; } = string.Empty;
     public ICollection<UserRole> UserRoles { get; set; } = [];
 }

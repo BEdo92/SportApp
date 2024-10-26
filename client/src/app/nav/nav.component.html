@@ -11,6 +11,9 @@
                 <li class="nav-item">
                     <a routerLink="/othersport" class="nav-link active">Logged by others</a>
                 </li>
+                <li *appHasRole="['Admin']" class="nav-item">
+                    <a routerLink="/admin" class="nav-link active">Admin</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" (click)="logout()">Logout</a>
                 </li>

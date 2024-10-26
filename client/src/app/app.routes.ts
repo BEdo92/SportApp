@@ -7,6 +7,8 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { preventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { adminGuard } from './_guards/admin.guard';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -19,6 +21,7 @@ export const routes: Routes = [
             {path: 'useredit', component: UserEditComponent, 
                 canDeactivate: [preventUnsavedChangesGuard]},
             {path: 'othersport', component: OtherSportComponent},
+            {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]}
         ]
     },
     {path: 'not-found', component: NotFoundComponent, pathMatch: 'full'},

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using SportAndStepsApps.Data;
+using SportAndStepsApps.Models;
 using System.Text;
 
 namespace SportAndStepsApps.Extensions;
@@ -8,6 +11,14 @@ public static class IdentityServiceExtensions
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
+        services.AddIdentityCore<User>(opt =>
+        {
+            opt.Password.RequireNonAlphanumeric = false;
+        })
+            .AddRoles<AppRole>()
+            .AddRoleManager<RoleManager<AppRole>>()
+            .AddEntityFrameworkStores<SportsContext>();
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -20,6 +31,10 @@ public static class IdentityServiceExtensions
                     ValidateAudience = false
                 };
             });
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+            .AddPolicy("MemberRole", policy => policy.RequireRole("Member"));
 
         return services;
     }

@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.Extensions;
 using SportAndStepsApps.Middleware;
+using SportAndStepsApps.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +35,11 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<SportsContext>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
     await Seed.SeedSportTypes(context);
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {

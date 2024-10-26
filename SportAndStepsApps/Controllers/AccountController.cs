@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SportAndStepsApps.Data;
 using SportAndStepsApps.DTOs;
 using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace SportAndStepsApps.Controllers;
 
-public class AccountController(SportsContext context, ITokenService tokenService, IMapper mapper) : BaseApiController
+public class AccountController(UserManager<User> userManager, ITokenService tokenService, IMapper mapper) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> RegisterAsync(RegisterDto registerDto)
@@ -20,20 +18,20 @@ public class AccountController(SportsContext context, ITokenService tokenService
             return BadRequest("Username is taken");
         }
 
-        using var hmac = new HMACSHA512();
-
         var user = mapper.Map<User>(registerDto);
         user.UserName = registerDto.Username.ToLower();
-        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
-        user.PasswordSalt = hmac.Key;
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        var result = await userManager.CreateAsync(user, registerDto.Password);
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
 
         var userDto = new UserDto
         {
             Username = user.UserName,
-            Token = tokenService.CreateToken(user)
+            Token = await tokenService.CreateTokenAsync(user)
         };
 
         return userDto;
@@ -42,37 +40,32 @@ public class AccountController(SportsContext context, ITokenService tokenService
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> LoginAsync(LoginDto loginDto)
     {
-        var user = await context.Users.FirstOrDefaultAsync(x =>
-        x.UserName == loginDto.Username/*.ToLower()*/);
+        var user = await userManager.Users.FirstOrDefaultAsync(x =>
+        x.NormalizedUserName == loginDto.Username.ToUpper());
 
-        if (user is null)
+        if (user is null || user.UserName is null)
         {
             return Unauthorized("Invalid username");
         }
 
-        using var hmac = new HMACSHA512(user.PasswordSalt);
+        var result = await userManager.CheckPasswordAsync(user, loginDto.Password);
 
-        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-        for (int i = 0; i < computedHash.Length; i++)
+        if (!result)
         {
-            if (computedHash[i] != user.PasswordHash[i])
-            {
-                return Unauthorized("Invalid password");
-            }
+            return Unauthorized();
         }
 
         return new UserDto
         {
             Username = user.UserName,
-            Token = tokenService.CreateToken(user)
+            Token = await tokenService.CreateTokenAsync(user)
         };
     }
 
     private async Task<bool> UserExistsAsync(string username)
     {
-        return await context.Users.AnyAsync(x =>
-            x.UserName.ToLower() == username.ToLower());
+        return await userManager.Users.AnyAsync(x =>
+            x.NormalizedUserName == username.ToUpper());
         // NOTE: For EF, operator '==' should be used instead of 'Equals'.
     }
 }
