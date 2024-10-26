@@ -9,6 +9,5 @@ public interface IUserActivityRepository
     Task<UserActivity?> GetUserActivityByIdAsync(int sportId);
     Task<IEnumerable<SportSummaryDto>> GetSportSummaryByUserNameAsync(string username);
     Task AddUserActivityAsync(UserActivity userActivity);
-    Task<bool> SaveAllAsync();
     Task<SportSummaryDto?> GetSummarizedDistanceBySportTypeAsync(string sportType);
 }

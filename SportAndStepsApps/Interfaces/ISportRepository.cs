@@ -1,7 +1,8 @@
-﻿namespace SportAndStepsApps.Interfaces
+﻿namespace SportAndStepsApps.Interfaces;
+
+public interface ISportRepository
 {
-    public interface ISportRepository
-    {
-        Task<int> GetSportIdAsync(string sportType);
-    }
+    Task<int> GetSportIdAsync(string sportType);
+
+    Task<IEnumerable<string>> GetSportTypesAsync();
 }

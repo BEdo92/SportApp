@@ -9,12 +9,12 @@ using System.Security.Claims;
 namespace SportAndStepsApps.Controllers;
 
 [Authorize]
-public class UserActivitiesController(IUserActivityRepository userActivityRepository, ISportRepository sportRepository, IMapper mapper) : BaseApiController
+public class UserActivitiesController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserActivity>>> GetUserActivitiesAsync()
     {
-        var userActivities = await userActivityRepository.GetUserActivitiesAsync();
+        var userActivities = await unitOfWork.UserActivityRepository.GetUserActivitiesAsync();
 
         return Ok(userActivities);
     }
@@ -22,7 +22,7 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
     [HttpGet("user/{username}")]
     public async Task<ActionResult<IEnumerable<SportSummaryDto>>> GetSportSummaryByUsernameAsync(string username)
     {
-        var userActivities = await userActivityRepository.GetSportSummaryByUserNameAsync(username);
+        var userActivities = await unitOfWork.UserActivityRepository.GetSportSummaryByUserNameAsync(username);
 
         return Ok(userActivities);
     }
@@ -30,7 +30,7 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
     [HttpGet("sport/{sporttype}")]
     public async Task<ActionResult<IEnumerable<SportSummaryDto>>> GetSummarizedDistanceBySportTypeAsync(string sportType)
     {
-        var sportSummary = await userActivityRepository.GetSummarizedDistanceBySportTypeAsync(sportType);
+        var sportSummary = await unitOfWork.UserActivityRepository.GetSummarizedDistanceBySportTypeAsync(sportType);
 
         if (sportSummary == null)
         {
@@ -53,7 +53,7 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
         //var userActivity = mapper.Map<UserActivity>(sport);
         //userActivity.UserId = int.Parse(userId);
 
-        int sportTypeId = await sportRepository.GetSportIdAsync(sport.SportType);
+        int sportTypeId = await unitOfWork.SportRepository.GetSportIdAsync(sport.SportType);
 
         var userActivity = new UserActivity
         {
@@ -63,9 +63,9 @@ public class UserActivitiesController(IUserActivityRepository userActivityReposi
             SportTypeId = sportTypeId
         };
 
-        await userActivityRepository.AddUserActivityAsync(userActivity);
+        await unitOfWork.UserActivityRepository.AddUserActivityAsync(userActivity);
 
-        if (await userActivityRepository.SaveAllAsync())
+        if (await unitOfWork.CompleteAsync())
         {
             return Ok(userActivity);
         }

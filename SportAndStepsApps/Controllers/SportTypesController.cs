@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SportAndStepsApps.Data;
+using SportAndStepsApps.Interfaces;
 
 namespace SportAndStepsApps.Controllers;
 
-public class SportTypesController(SportsContext context) : BaseApiController
+public class SportTypesController(IUnitOfWork unitOfWork) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<string>>> GetSportTypesAsync()
     {
-        var sportTypes = await context.SportTypes.Select(c => c.Name).OrderBy(c => c).ToListAsync();
+        var sportTypes = await unitOfWork.SportRepository.GetSportTypesAsync();
 
         return Ok(sportTypes);
     }

@@ -8,12 +8,12 @@ using System.Security.Claims;
 namespace SportAndStepsApps.Controllers;
 
 [Authorize]
-public class UsersController(IUserRepository userRepository, IMapper mapper) : BaseApiController
+public class UsersController(IUnitOfWork unitOfWork, IMapper mapper) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsersAsync()
     {
-        var users = await userRepository.GetUsersAsync();
+        var users = await unitOfWork.UserRepository.GetUsersAsync();
 
         var usersToReturn = mapper.Map<IEnumerable<MemberDto>>(users);
 
@@ -23,7 +23,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
     [HttpGet("{username}")]
     public async Task<ActionResult<MemberDto>> GetUserAsync(string username)
     {
-        var user = await userRepository.GetUserByUsernameAsync(username);
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
         if (user is null)
         {
@@ -45,7 +45,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
             return BadRequest("No username was found in token.");
         }
 
-        var user = await userRepository.GetUserByUsernameAsync(username);
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
         if (user is null)
         {
@@ -54,7 +54,7 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
 
         mapper.Map(memberDto, user);
 
-        if (await userRepository.SaveAllAsync())
+        if (await unitOfWork.CompleteAsync())
         {
             return NoContent();
         }

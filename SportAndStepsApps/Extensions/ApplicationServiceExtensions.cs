@@ -23,6 +23,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserActivityRepository, UserActivityRepository>();
         services.AddScoped<ISportRepository, SportRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
