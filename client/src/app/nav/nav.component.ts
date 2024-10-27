@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TitleCasePipe } from '@angular/common';
 import { HasRoleDirective } from '../_directives/has-role.directive';
@@ -17,6 +17,7 @@ import { HasRoleDirective } from '../_directives/has-role.directive';
 export class NavComponent {
   accountService = inject(AccountService);
   private toaster = inject(ToastrService);
+  private router = inject(Router);
   model: any = {};
 
     login() {
@@ -31,6 +32,8 @@ export class NavComponent {
 
     logout() {
       this.accountService.logout();
+      this.router.navigate(['/']);
+      this.model = {};
     }
 
 }

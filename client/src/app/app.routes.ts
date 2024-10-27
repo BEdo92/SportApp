@@ -25,6 +25,6 @@ export const routes: Routes = [
         ]
     },
     {path: 'not-found', component: NotFoundComponent, pathMatch: 'full'},
-    {path: '*server-error', component: ServerErrorComponent, pathMatch: 'full'},
+    {path: 'server-error', component: ServerErrorComponent, pathMatch: 'full'},
     {path: '**', component: HomeComponent, pathMatch: 'full'}
 ];
