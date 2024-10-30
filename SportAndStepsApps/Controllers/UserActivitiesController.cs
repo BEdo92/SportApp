@@ -27,6 +27,14 @@ public class UserActivitiesController(IUnitOfWork unitOfWork, IMapper mapper) : 
         return Ok(userActivities);
     }
 
+    [HttpGet("longest/{sporttype}")]
+    public async Task<ActionResult<int>> GetLongestDistanceBySportTypeAsync(string sportType)
+    {
+        var longestDistance = await unitOfWork.UserActivityRepository.GetLongestDistanceBySportTypeAsync(sportType);
+
+        return Ok(longestDistance);
+    }
+
     [HttpGet("sport/{sporttype}")]
     public async Task<ActionResult<IEnumerable<SportSummaryDto>>> GetSummarizedDistanceBySportTypeAsync(string sportType)
     {

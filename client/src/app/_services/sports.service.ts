@@ -30,4 +30,8 @@ export class SportsService {
   getSportByType(sportType: string) {
     return this.http.get<SportSummary>(this.baseUrl + 'useractivities/sport/' + sportType);
   }
+
+  getLongestByType(sportType: string) {
+    return this.http.get<number>(this.baseUrl + 'useractivities/longest/' + sportType);
+  }
 }

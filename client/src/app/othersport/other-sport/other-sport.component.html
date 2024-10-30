@@ -6,3 +6,17 @@
     </div>
     }
 </div>
+<h2>Filter for the longest</h2>
+<div>
+    <label for="sportType">Sport Type</label>
+    <br>
+    <select id="sportType" (change)="filterBySportType($event)">
+        <option value="">All</option>
+        @for (sportType of sportTypes; track sportType) {
+        <option value="{{sportType}}">{{sportType}}</option>
+        }
+    </select>
+</div>
+<div>
+    The longest distance is {{longestDistance}} km.
+</div>

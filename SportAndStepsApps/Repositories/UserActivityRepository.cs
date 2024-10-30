@@ -62,8 +62,13 @@ public class UserActivityRepository(SportsContext context, IMapper mapper) : IUs
         return await context.UserActivities.FindAsync(id);
     }
 
-    public async Task<bool> SaveAllAsync()
+    public async Task<int> GetLongestDistanceBySportTypeAsync(string sportType)
     {
-        return await context.SaveChangesAsync() > 0;
+        var maxDistance = await context.UserActivities
+        .Where(x => x.SportType.Name == sportType)
+        .Select(x => (int?)x.Distance)
+        .MaxAsync();
+
+        return maxDistance ?? 0;
     }
 }

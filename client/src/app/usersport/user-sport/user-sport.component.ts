@@ -28,7 +28,7 @@ export class UserSportComponent implements OnInit {
 
   initializeForm() {
     this.saveActivityForm = this.fb.group({
-      date: ['', Validators.required],
+      date: ['', Validators.required, Validators.max(this.maxDate.getTime())],
       sportType: [this.sportTypes, Validators.required],
       distance: ['', [Validators.required, Validators.pattern('^[0-9]*$')]]
     });

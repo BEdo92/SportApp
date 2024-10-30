@@ -10,4 +10,5 @@ public interface IUserActivityRepository
     Task<IEnumerable<SportSummaryDto>> GetSportSummaryByUserNameAsync(string username);
     Task AddUserActivityAsync(UserActivity userActivity);
     Task<SportSummaryDto?> GetSummarizedDistanceBySportTypeAsync(string sportType);
+    Task<int> GetLongestDistanceBySportTypeAsync(string sportType);
 }
