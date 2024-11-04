@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SportAndStepsApps.Data;
 using SportAndStepsApps.DTOs;
+using SportAndStepsApps.Helpers;
 using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 
@@ -55,6 +56,28 @@ public class UserActivityRepository(SportsContext context, IMapper mapper) : IUs
             .GroupBy(x => x.SportType)
             .ProjectTo<SportSummaryDto>(mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public async Task<PagedList<SportDto?>> GetUserActivitiesByUserIdAsync(string userId, SportParams sportParams)
+    {
+        var query = context.UserActivities.Where(x => x.UserId == int.Parse(userId)).ProjectTo<SportDto>(mapper.ConfigurationProvider).AsQueryable();
+
+        if (!string.IsNullOrEmpty(sportParams.SportType))
+        {
+            query = query.Where(x => x.SportType == sportParams.SportType);
+        }
+
+        if (sportParams.DistanceFrom is not null && sportParams.DistanceTo is not null)
+        {
+            query = query.Where(x => x.Distance >= sportParams.DistanceFrom && x.Distance <= sportParams.DistanceTo);
+        }
+
+        if (sportParams.DateFrom is not null && sportParams.DateTo is not null)
+        {
+            query = query.Where(x => x.Date >= sportParams.DateFrom && x.Date <= sportParams.DateTo);
+        }
+
+        return await PagedList<SportDto>.CreateAsync(query, sportParams.PageNumber, sportParams.PageSize);
     }
 
     public async Task<UserActivity?> GetUserActivityByIdAsync(int id)

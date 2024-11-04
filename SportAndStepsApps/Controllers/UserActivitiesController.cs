@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportAndStepsApps.DTOs;
+using SportAndStepsApps.Extensions;
+using SportAndStepsApps.Helpers;
 using SportAndStepsApps.Interfaces;
 using SportAndStepsApps.Models;
 using System.Security.Claims;
@@ -25,6 +27,23 @@ public class UserActivitiesController(IUnitOfWork unitOfWork, IMapper mapper) : 
         var userActivities = await unitOfWork.UserActivityRepository.GetSportSummaryByUserNameAsync(username);
 
         return Ok(userActivities);
+    }
+
+    [HttpGet("user/sports")]
+    public async Task<ActionResult<IEnumerable<SportDto?>>> GetSportActivitiesByUserId([FromQuery] SportParams sportParams)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return BadRequest("No user ID was found in token.");
+        }
+
+        var sports = await unitOfWork.UserActivityRepository.GetUserActivitiesByUserIdAsync(userId, sportParams);
+
+        Response.AddPaginationHeader(sports);
+
+        return Ok(sports);
     }
 
     [HttpGet("longest/{sporttype}")]

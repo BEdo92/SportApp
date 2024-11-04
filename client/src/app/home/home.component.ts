@@ -6,11 +6,12 @@ import { TitleCasePipe } from '@angular/common';
 import { SportsService } from '../_services/sports.service';
 import { SportCardComponent } from '../othersport/sport-card/sport-card.component';
 import { SportSummary } from '../_models/sportsummary';
+import { UserSportFilterComponent } from './user-sport-filter/user-sport-filter.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RegisterComponent, FormsModule, TitleCasePipe, SportCardComponent],
+  imports: [RegisterComponent, FormsModule, TitleCasePipe, SportCardComponent, UserSportFilterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
   sportsSummaries: SportSummary[] = [];
   accountService = inject(AccountService);
   registerMode = false;
+  filterMode = false;
   users: any;
 
   ngOnInit(): void {
@@ -27,6 +29,10 @@ export class HomeComponent implements OnInit {
 
   registerToggle() {
     this.registerMode = !this.registerMode;
+  }
+
+  filterToggle() {
+    this.filterMode = !this.filterMode;
   }
 
   cancelRegisterMode(event: boolean) {
