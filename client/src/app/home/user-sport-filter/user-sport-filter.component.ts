@@ -6,11 +6,12 @@ import { SportActivity } from '../../_models/sportactivity';
 import { TextInputComponent } from '../../_forms/text-input/text-input.component';
 import { DatePickerComponent } from '../../_forms/date-picker/date-picker.component';
 import { CommonModule } from '@angular/common';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-user-sport-filter',
   standalone: true,
-  imports: [ReactiveFormsModule, TextInputComponent, DatePickerComponent, CommonModule],
+  imports: [ReactiveFormsModule, TextInputComponent, DatePickerComponent, CommonModule, PaginationModule],
   templateUrl: './user-sport-filter.component.html',
   styleUrl: './user-sport-filter.component.css'
 })
@@ -34,15 +35,19 @@ export class UserSportFilterComponent {
     this.filterActivityForm = this.fb.group({
       dateFrom: ['', Validators.max(this.maxDate.getTime() - 1)],
       dateTo: ['', Validators.max(this.maxDate.getTime())],
-      sportType: [this.sportTypes],
+      sportType: [null],
       distanceFrom: ['', [Validators.pattern('^[0-9]*$')]],
       distanceTo: ['', [Validators.pattern('^[0-9]*$')]],
     });
   }
 
   filterData() {
-    console.log(this.filterActivityForm.value);
-    this.sportService.filterActivity(this.filterActivityForm.value);
+    const formValue = this.filterActivityForm.value;
+    if (!formValue.sportType) {
+      formValue.sportType = 'all';
+    }
+    console.log(formValue);
+    this.sportService.filterActivity(formValue, this.pageNumber, this.pageSize);
   }
 
   loadSportTypes() {
@@ -54,5 +59,12 @@ export class UserSportFilterComponent {
       },
       error: error => this.validationErrors = error
     });
+  }
+
+  pageChanged(event: any) {
+    if (this.pageNumber !== event.page) {
+      this.pageNumber = event.page;
+      this.filterData();
+    }
   }
 }

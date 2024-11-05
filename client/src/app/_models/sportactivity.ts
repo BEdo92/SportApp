@@ -1,5 +1,5 @@
 export interface SportActivity {
     distance: number;
-    type: string;
+    sportType: string;
     date: string;
 }

@@ -38,10 +38,21 @@ export class SportsService {
     return this.http.get<number>(this.baseUrl + 'useractivities/longest/' + sportType);
   }
 
-  filterActivity(model: any) {
+  filterActivity(model: any, pageNumber: number, pageSize: number) {
+    // TODO: Fix the date format.
+    if (model.dateFrom) {
+      model.dateFrom = new Date(model.dateFrom).toISOString();
+    }
+    if (model.dateTo) {
+      model.dateTo = new Date(model.dateTo).toISOString();
+    }
+
+    model.pageNumber = pageNumber;
+    model.pageSize = pageSize;
+
     console.log(model);
-    console.log(this.baseUrl + 'useractivities/user/sports/', {observe: 'response', params: model});
-    return this.http.get<SportActivity[]>(this.baseUrl + 'useractivities/user/sports/', {observe: 'response', params: model}).subscribe({
+    console.log(this.baseUrl + 'useractivities/user/sports/', { observe: 'response', params: model });
+    return this.http.get<SportActivity[]>(this.baseUrl + 'useractivities/user/sports/', { observe: 'response', params: model }).subscribe({
       next: response => {
         this.paginatedResult.set({
           items: response.body as SportActivity[],

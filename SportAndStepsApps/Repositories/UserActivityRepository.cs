@@ -62,7 +62,7 @@ public class UserActivityRepository(SportsContext context, IMapper mapper) : IUs
     {
         var query = context.UserActivities.Where(x => x.UserId == int.Parse(userId)).ProjectTo<SportDto>(mapper.ConfigurationProvider).AsQueryable();
 
-        if (!string.IsNullOrEmpty(sportParams.SportType))
+        if (!string.IsNullOrEmpty(sportParams.SportType) && sportParams.SportType != "all")
         {
             query = query.Where(x => x.SportType == sportParams.SportType);
         }
@@ -72,12 +72,17 @@ public class UserActivityRepository(SportsContext context, IMapper mapper) : IUs
             query = query.Where(x => x.Distance >= sportParams.DistanceFrom && x.Distance <= sportParams.DistanceTo);
         }
 
-        if (sportParams.DateFrom is not null && sportParams.DateTo is not null)
+        if (sportParams.DateFrom is not null)
         {
-            query = query.Where(x => x.Date >= sportParams.DateFrom && x.Date <= sportParams.DateTo);
+            query = query.Where(x => x.Date >= sportParams.DateFrom);
         }
 
-        return await PagedList<SportDto>.CreateAsync(query, sportParams.PageNumber, sportParams.PageSize);
+        if (sportParams.DateTo is not null)
+        {
+            query = query.Where(x => x.Date <= sportParams.DateTo);
+        }
+
+        return await PagedList<SportDto?>.CreateAsync(query, sportParams.PageNumber, sportParams.PageSize);
     }
 
     public async Task<UserActivity?> GetUserActivityByIdAsync(int id)
