@@ -7,11 +7,12 @@ import { TextInputComponent } from '../../_forms/text-input/text-input.component
 import { DatePickerComponent } from '../../_forms/date-picker/date-picker.component';
 import { CommonModule } from '@angular/common';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 @Component({
   selector: 'app-user-sport-filter',
   standalone: true,
-  imports: [ReactiveFormsModule, TextInputComponent, DatePickerComponent, CommonModule, PaginationModule],
+  imports: [ReactiveFormsModule, TextInputComponent, DatePickerComponent, CommonModule, PaginationModule, ButtonsModule],
   templateUrl: './user-sport-filter.component.html',
   styleUrl: './user-sport-filter.component.css'
 })
@@ -38,16 +39,21 @@ export class UserSportFilterComponent {
       sportType: [null],
       distanceFrom: ['', [Validators.pattern('^[0-9]*$')]],
       distanceTo: ['', [Validators.pattern('^[0-9]*$')]],
+      orderByDate: ['date'],
+      orderByDistance: ['distance'],
     });
   }
 
-  filterData() {
+  filterData(orderBy: string = 'date') {
     const formValue = this.filterActivityForm.value;
     if (!formValue.sportType) {
       formValue.sportType = 'all';
     }
+    formValue.orderBy = formValue.orderByDate === 'date' ? formValue.orderByDate : formValue.orderByDistance;
+    formValue.pageNumber = this.pageNumber;
+    formValue.pageSize = this.pageSize;
     console.log(formValue);
-    this.sportService.filterActivity(formValue, this.pageNumber, this.pageSize);
+    this.sportService.filterActivity(formValue);
   }
 
   loadSportTypes() {

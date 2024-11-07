@@ -15,4 +15,6 @@ public class SportParams
     public int? DistanceTo { get; set; }
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
+
+    public string OrderBy { get; set; } = "date";
 }

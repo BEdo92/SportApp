@@ -4,7 +4,7 @@ public interface IUnitOfWork
 {
     IUserRepository UserRepository { get; }
     IUserActivityRepository UserActivityRepository { get; }
-    ISportRepository SportRepository { get; }
+    ISportTypeRepository SportRepository { get; }
 
     Task<bool> CompleteAsync();
     bool HasChanges();

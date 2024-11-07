@@ -25,6 +25,10 @@ export class SportsService {
   getSportTypes() {
     return this.http.get<string[]>(this.baseUrl + 'sporttypes');
   }
+  
+  updateSportTypes(sportTypes: string[]) {
+    return this.http.put<string[]>(this.baseUrl + 'sporttypes', sportTypes);
+  }
 
   saveActivity(model: any) {
     return this.http.post(this.baseUrl + 'useractivities', model);
@@ -38,17 +42,13 @@ export class SportsService {
     return this.http.get<number>(this.baseUrl + 'useractivities/longest/' + sportType);
   }
 
-  filterActivity(model: any, pageNumber: number, pageSize: number) {
-    // TODO: Fix the date format.
+  filterActivity(model: any) {
     if (model.dateFrom) {
       model.dateFrom = new Date(model.dateFrom).toISOString();
     }
     if (model.dateTo) {
       model.dateTo = new Date(model.dateTo).toISOString();
     }
-
-    model.pageNumber = pageNumber;
-    model.pageSize = pageSize;
 
     console.log(model);
     console.log(this.baseUrl + 'useractivities/user/sports/', { observe: 'response', params: model });

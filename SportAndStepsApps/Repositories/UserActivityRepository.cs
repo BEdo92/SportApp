@@ -82,6 +82,12 @@ public class UserActivityRepository(SportsContext context, IMapper mapper) : IUs
             query = query.Where(x => x.Date <= sportParams.DateTo);
         }
 
+        query = sportParams.OrderBy switch
+        {
+            "date" => query.OrderByDescending(x => x.Date),
+            _ => query.OrderByDescending(x => x.Distance)
+        };
+
         return await PagedList<SportDto?>.CreateAsync(query, sportParams.PageNumber, sportParams.PageSize);
     }
 

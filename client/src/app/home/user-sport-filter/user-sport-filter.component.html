@@ -1,5 +1,5 @@
 <div>
-    <form [formGroup]="filterActivityForm" (ngSubmit)="filterData()" autocomplete="off">
+    <form [formGroup]="filterActivityForm" (click)="filterData()" autocomplete="off">
         <hr>
 
         <app-date-picker [formControl]="$any(filterActivityForm.controls['dateFrom'])" [label]="'Date from'">
@@ -22,6 +22,15 @@
         <app-text-input [formControl]="$any(filterActivityForm.controls['distanceTo'])" [label]="'Distance to'">
         </app-text-input>
 
+        <div>
+            <label>Filter by:</label>
+            <br>
+            <input type="radio" id="filterByDate" name="orderBy" [formControl]="$any(filterActivityForm.controls['orderByDate'])" value="date">
+            <label for="filterByDate">Date</label>
+            <input type="radio" id="filterByDistance" name="orderBy" [formControl]="$any(filterActivityForm.controls['orderByDistance'])" value="distance">
+            <label for="filterByDistance">Distance</label>
+        </div>
+
         @if (validationErrors) {
         <div class="alert alert-danger text-start">
             <ul>
@@ -35,6 +44,7 @@
         <div class="form-group text-center">
             <button class="btn btn-success me-2" type="submit">Filter</button>
         </div>
+
     </form>
 
     @if (sportService.paginatedResult()?.pagination) {

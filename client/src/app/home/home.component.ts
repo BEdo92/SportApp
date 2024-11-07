@@ -7,11 +7,12 @@ import { SportsService } from '../_services/sports.service';
 import { SportCardComponent } from '../othersport/sport-card/sport-card.component';
 import { SportSummary } from '../_models/sportsummary';
 import { UserSportFilterComponent } from './user-sport-filter/user-sport-filter.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RegisterComponent, FormsModule, TitleCasePipe, SportCardComponent, UserSportFilterComponent],
+  imports: [RegisterComponent, FormsModule, TitleCasePipe, SportCardComponent, UserSportFilterComponent, TabsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

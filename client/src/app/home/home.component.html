@@ -4,23 +4,28 @@
         @if (!registerMode) {
         @if (accountService.currentUser()) {
         <h2>Welcome back, {{accountService.currentUser()?.username | titlecase}}!</h2>
+        <h3>Logged by you</h3>
         <div>
-            <h3>Logged by you</h3>
-            <div class="row">
-                @for (sport of sportsSummaries; track sport.sportType) {
-                <h6 class="card-title text-center mb-1">
-                    <i class="fa fa-heartbeat me-2"></i>
-                    {{sport?.sportType}}
-                </h6>
-                <p class="card-text text-muted text-center">{{sport?.distance}} km</p>
-                }
-            </div>
-            <button (click)="filterToggle()" class="btn btn-primary btn-lg me-2">Filter your activities</button>
-
-            @if (filterMode) {
-            <app-user-sport-filter></app-user-sport-filter>
-            <button (click)="filterToggle()" class="btn btn-primary btn-lg me-2">Cancel</button>
-            }
+            <tabset class="member-tabset">
+                <tab heading="Sport summaries">
+                    <div class="container">
+                        <div class="row">
+                            @for (sport of sportsSummaries; track sport.sportType) {
+                            <h6 class="card-title text-center mb-1">
+                                <i class="fa fa-heartbeat me-2"></i>
+                                {{sport?.sportType}}
+                            </h6>
+                            <p class="card-text text-muted text-center">{{sport?.distance}} km</p>
+                            }
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Filter your activities">
+                    <div class="container">
+                        <app-user-sport-filter></app-user-sport-filter>
+                    </div>
+                </tab>
+            </tabset>
         </div>
         } @else {
         <h1>Welcome to Sports meter</h1>

@@ -1,0 +1,17 @@
+<h2>Add or delete sport types</h2>
+
+<div>
+    <select id="sportType" class="form-select" (change)="deleteItem($event)">
+        @for (sportType of sportTypes; track sportType) {
+        <option value="{{sportType}}">{{sportType}}</option>
+        }
+    </select>
+</div>
+  
+  <form (ngSubmit)="addItem()">
+    <input  class="form-control" type="text" [(ngModel)]="newSport" name="newSport" placeholder="Add new sport type"/>
+    <button class="btn btn-primary" type="submit">Add</button>
+  </form>
+  
+<button class="btn btn-primary" (click)="updateSportTypes()">Update</button>
+  
