@@ -7,4 +7,6 @@ export class SportParams {
     distanceFrom: number | null = null;
     distanceTo: number | null = null;
     orderBy = 'date';
+
+    constructor() {}
 }

@@ -5,7 +5,7 @@
         placeholder={{label()}}
         bsDatepicker
         [bsConfig]="bsConfig"
-        [maxDate]="maxDate()"
+        [maxDate]="maxDate"
     >
     <div *ngIf="control.hasError('required')" class="invalid-feedback text-start">Please enter a {{label()}}.</div>
 </div>

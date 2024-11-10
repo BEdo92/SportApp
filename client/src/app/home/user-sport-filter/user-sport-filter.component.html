@@ -1,61 +1,67 @@
 <div>
-    <form [formGroup]="filterActivityForm" (click)="filterData()" autocomplete="off">
-        <hr>
+    <div class="container mt-3">
+        <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="filterData()">
+            <div class="d-flex flex-column mx-2">
+                <app-date-picker [(ngModel)]="sportService.sportParams.dateFrom" [label]="'Date from'">
+                </app-date-picker>
 
-        <app-date-picker [formControl]="$any(filterActivityForm.controls['dateFrom'])" [label]="'Date from'">
-        </app-date-picker>
+                
+                <app-date-picker [(ngModel)]="sportService.sportParams.dateTo" [label]="'Date to'">
+                </app-date-picker>
+            </div>
 
-        <app-date-picker [formControl]="$any(filterActivityForm.controls['dateTo'])" [label]="'Date to'">
-        </app-date-picker>
+            <div class="d-flex flex-column mx-2">
+                <label for="sportType">Sport Type</label>
+                <br>
+                <select [(ngModel)]="sportService.sportParams.sportType" id="sportType">
+                    <option *ngFor="let sportType of sportTypes" [value]="sportType">{{ sportType }}</option>
+                </select>
+            </div>
 
-        <div>
-            <label for="sportType">Sport Type</label>
-            <br>
-            <select [formControl]="$any(filterActivityForm.controls['sportType'])" id="sportType">
-                <option *ngFor="let sportType of sportTypes" [value]="sportType">{{ sportType }}</option>
-            </select>
-        </div>
+            <div class="d-flex flex-column mx-2">
+                <label class="col-form-label">Distance from </label>
+                <input type="number" class="form-control ms-1" style="width: 70px;" name="maxAge"
+                    [(ngModel)]="sportService.sportParams.distanceFrom">
 
-        <app-text-input [formControl]="$any(filterActivityForm.controls['distanceFrom'])" [label]="'Distance from'">
-        </app-text-input>
+                <label class="col-form-label">Distance to </label>
+                <input type="number" class="form-control ms-1" style="width: 70px;" name="maxAge"
+                    [(ngModel)]="sportService.sportParams.distanceTo">
+            </div>
 
-        <app-text-input [formControl]="$any(filterActivityForm.controls['distanceTo'])" [label]="'Distance to'">
-        </app-text-input>
 
-        <div>
-            <label>Filter by:</label>
-            <br>
-            <input type="radio" id="filterByDate" name="orderBy" [formControl]="$any(filterActivityForm.controls['orderByDate'])" value="date">
-            <label for="filterByDate">Date</label>
-            <input type="radio" id="filterByDistance" name="orderBy" [formControl]="$any(filterActivityForm.controls['orderByDistance'])" value="distance">
-            <label for="filterByDistance">Distance</label>
-        </div>
+            <button class="btn btn-primary ms-1" type="submit">Apply filters</button>
+            <button (click)="resetFilters()" class="btn btn-info ms-1" type="button">Reset filters</button>
 
-        @if (validationErrors) {
-        <div class="alert alert-danger text-start">
-            <ul>
-                @for (error of validationErrors; track $index) {
-                <li>{{error}}</li>
-                }
-            </ul>
+            <div class="col">
+                <div class="btn-group float-end">
+                    <button type="button" class="btn btn-primary" name="orderBy" (click)="filterData()" btnRadio="date"
+                        [(ngModel)]="sportService.sportParams.orderBy">Date</button>
+                    <button type="button" class="btn btn-primary" name="orderBy" (click)="filterData()"
+                        btnRadio="distance" [(ngModel)]="sportService.sportParams.orderBy">Distance</button>
+                </div>
+            </div>
+
+            @if (validationErrors) {
+            <div class="alert alert-danger text-start">
+                <ul>
+                    @for (error of validationErrors; track $index) {
+                    <li>{{error}}</li>
+                    }
+                </ul>
+            </div>
+            }
+        </form>
+
+        @if (sportService.paginatedResult()?.pagination) {
+        <div class="d-flex justify-content-center">
+            <pagination [boundaryLinks]="true" [totalItems]="sportService.paginatedResult()?.pagination!.totalItems"
+                [itemsPerPage]="sportService.paginatedResult()?.pagination!.itemsPerPage"
+                (pageChanged)="pageChanged($event)" [maxSize]="10" previousText="&lsaquo;" nextText="&rsaquo;"
+                firstText="&laquo;" lastText="&raquo;">
+            </pagination>
         </div>
         }
-
-        <div class="form-group text-center">
-            <button class="btn btn-success me-2" type="submit">Filter</button>
-        </div>
-
-    </form>
-
-    @if (sportService.paginatedResult()?.pagination) {
-    <div class="d-flex justify-content-center">
-        <pagination [boundaryLinks]="true" [totalItems]="sportService.paginatedResult()?.pagination!.totalItems"
-            [itemsPerPage]="sportService.paginatedResult()?.pagination!.itemsPerPage"
-            (pageChanged)="pageChanged($event)" [maxSize]="10" previousText="&lsaquo;" nextText="&rsaquo;"
-            firstText="&laquo;" lastText="&raquo;">
-        </pagination>
     </div>
-    }
 
     <h6 class="card-title text-center mb-1"></h6>
     <table class="table table-striped table-bordered table-hover text-center">

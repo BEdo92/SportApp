@@ -12,15 +12,17 @@ import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker
 })
 export class DatePickerComponent implements ControlValueAccessor {
   label = input<string>('');
-  maxDate = input<Date>();
+  maxDate: Date | undefined;
   bsConfig?: Partial<BsDatepickerConfig>;
 
   constructor(@Self() public ngControl: NgControl) {
     this.ngControl.valueAccessor = this
     this.bsConfig = {
-      containerClass: 'theme-red',
-      dateInputFormat: 'YYYY MMMM DD'
+      containerClass: 'theme-blue',
+      dateInputFormat: 'YYYY MMMM DD',
+
     };
+    this.maxDate = new Date();
   }
 
   writeValue(obj: any): void {

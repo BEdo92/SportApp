@@ -1,14 +1,13 @@
 import { Component,  inject,  OnInit,  output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
-import { JsonPipe, NgIf } from '@angular/common';
 import { TextInputComponent } from "../_forms/text-input/text-input.component";
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, NgIf, TextInputComponent],
+  imports: [ReactiveFormsModule, TextInputComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
